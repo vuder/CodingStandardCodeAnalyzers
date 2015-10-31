@@ -9,9 +9,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace CodingStandardCodeAnalyzers {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FieldAccessCodeAnalyzer : DiagnosticAnalyzer {
-        private static readonly string Title = "Access modifier for the field is wrong.";
-        private static readonly string MessageFormat = "Field must be private.";
-        private static readonly string Description = "All fields must be private, the only exception is static readonly fields.";
+        private static readonly LocalizableString Title = "Access modifier for the field is wrong.";
+        private static readonly LocalizableString MessageFormat = "Field must be private.";
+        private static readonly LocalizableString Description = "All fields must be private, the only exception is static readonly fields.";
         private static readonly string Category = "Access";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor("FieldAccessCodeAnalyzer", Title, MessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);
