@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers", "CodingStandardCodeAnalyzers\CodingStandardCodeAnalyzers\CodingStandardCodeAnalyzers.csproj", "{CA6FAA48-0828-49B6-B6DB-8F19D5357B12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers", "CodingStandardCodeAnalyzers\CodingStandardCodeAnalyzers.csproj", "{CA6FAA48-0828-49B6-B6DB-8F19D5357B12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers.Test", "CodingStandardCodeAnalyzers\CodingStandardCodeAnalyzers.Test\CodingStandardCodeAnalyzers.Test.csproj", "{0EB1E7B3-0821-40C8-82C2-FA7031E24D08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers.Test", "CodingStandardCodeAnalyzers.Test\CodingStandardCodeAnalyzers.Test.csproj", "{0EB1E7B3-0821-40C8-82C2-FA7031E24D08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers.Vsix", "CodingStandardCodeAnalyzers\CodingStandardCodeAnalyzers.Vsix\CodingStandardCodeAnalyzers.Vsix.csproj", "{C451D9A3-AF28-4022-9CF9-E5D2352292C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers.Vsix", "CodingStandardCodeAnalyzers.Vsix\CodingStandardCodeAnalyzers.Vsix.csproj", "{C451D9A3-AF28-4022-9CF9-E5D2352292C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
