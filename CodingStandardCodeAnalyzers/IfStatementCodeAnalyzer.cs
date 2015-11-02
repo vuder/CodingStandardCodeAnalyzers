@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -30,13 +29,15 @@ namespace CodingStandardCodeAnalyzers {
         private void AnalyzeIfStatementDeclaration(SyntaxNodeAnalysisContext context) {
             var ifStatement = context.Node as IfStatementSyntax;
             if (ifStatement == null) { return; }
-            if (ifStatement.ChildNodes().Count(node => node.Kind() == SyntaxKind.Block) == 0) {
-                Diagnostic diagnostic = Diagnostic.Create(Rule, ifStatement.GetLocation(), "if");
+            StatementSyntax thenClause = ifStatement.Statement;
+            if (thenClause != null && !(thenClause is BlockSyntax)) {
+                Diagnostic diagnostic = Diagnostic.Create(Rule, thenClause.GetLocation(), "if");
                 context.ReportDiagnostic(diagnostic);
             }
-            SyntaxNode elseClause = ifStatement.ChildNodes().FirstOrDefault(node => node.Kind() == SyntaxKind.ElseClause);
-            if (elseClause?.ChildNodes().Count(node => node.Kind() == SyntaxKind.Block) == 0) {
-                Diagnostic diagnostic = Diagnostic.Create(Rule, ifStatement.GetLocation(), "else");
+
+            ElseClauseSyntax elseClause = ifStatement.Else;
+            if (elseClause != null && !(elseClause.Statement is BlockSyntax)) {
+                Diagnostic diagnostic = Diagnostic.Create(Rule, elseClause.GetLocation(), "else");
                 context.ReportDiagnostic(diagnostic);
             }
         }
