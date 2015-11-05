@@ -36,6 +36,7 @@
     <Compile Include="FieldAccessCodeAnalyzerCodeFixProvider.cs" />
     <Compile Include="FieldAccessCodeAnalyzer.cs" />
     <Compile Include="IfStatementCodeAnalyzer.cs" />
+    <Compile Include="IfStatementCodeAnalyzerCodeFixProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

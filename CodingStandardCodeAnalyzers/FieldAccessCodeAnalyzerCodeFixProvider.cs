@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace CodingStandardCodeAnalyzers {
                         .WithLeadingTrivia(fieldDeclaration.GetLeadingTrivia())
                         .WithTrailingTrivia(fieldDeclaration.GetTrailingTrivia());
 
-            return await ReplacePropertyInDocumentAsync(document, fieldDeclaration, newfieldDeclaration, cancellationToken);
+            return await this.ReplaceNodeInDocumentAsync(document, cancellationToken, fieldDeclaration, newfieldDeclaration);
         }
 
         private static SyntaxToken CreatePrivateSyntaxToken(FieldDeclarationSyntax fieldDeclaration) {
@@ -62,12 +63,21 @@ namespace CodingStandardCodeAnalyzers {
             SyntaxToken privateSyntaxToken = SyntaxFactory.Token(leadingTrivia, SyntaxKind.PrivateKeyword, trailingTrivia);
             return privateSyntaxToken;
         }
+    }
 
-        private static async Task<Document> ReplacePropertyInDocumentAsync(Document document, FieldDeclarationSyntax fieldDeclaration, FieldDeclarationSyntax newFieldDeclaration, CancellationToken cancellationToken) {
+    public static class CodeFixProviderHelper {
+        public static async Task<Document> ReplaceNodesInDocumentAsync(this CodeFixProvider codeFixProvider, Document document, CancellationToken cancellationToken, params Tuple<SyntaxNode, SyntaxNode>[] nodes) {
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
-            SyntaxNode newRoot = root.ReplaceNode(fieldDeclaration, newFieldDeclaration);
-            SyntaxNode formattedRoot = Formatter.Format(newRoot, Formatter.Annotation, document.Project.Solution.Workspace);
+            foreach (Tuple<SyntaxNode, SyntaxNode> node in nodes) {
+                root = root.ReplaceNode(node.Item1, node.Item2);
+            }
+            //TODO: check if needed.
+            SyntaxNode formattedRoot = Formatter.Format(root, Formatter.Annotation, document.Project.Solution.Workspace);
             return document.WithSyntaxRoot(formattedRoot);
+        }
+
+        public static async Task<Document> ReplaceNodeInDocumentAsync(this CodeFixProvider codeFixProvider, Document document, CancellationToken cancellationToken, SyntaxNode oldNode, SyntaxNode newNode) {
+            return await ReplaceNodesInDocumentAsync(codeFixProvider, document, cancellationToken, new Tuple<SyntaxNode, SyntaxNode>(oldNode, newNode));
         }
     }
 }
