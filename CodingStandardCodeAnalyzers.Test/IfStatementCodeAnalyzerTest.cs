@@ -56,6 +56,19 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
+        public static readonly string Wrong5 = @"
+    using System;
+    namespace ConsoleApplication1 {
+        class TypeName {   
+            public int Wrong4(){
+                if (Environment.MachineName == String.Empty) 
+                    return 1;
+                else 
+                    return 2;
+            }
+        }
+    }";
+
         public static readonly string Correct1 = @"
     using System;
     namespace ConsoleApplication1 {
@@ -90,27 +103,33 @@ namespace CodingStandardCodeAnalyzers.Test {
 
         [TestMethod]
         public void IfStatementWithoutBracesInOneLineIsError() {
-            DiagnosticResult expected = CreateDiagnosticResult(6, 62, "if");
+            DiagnosticResult expected = CreateDiagnosticResult(6, 62, "return 1;");
             VerifyCSharpDiagnostic(Wrong1, expected);
         }
 
 
         [TestMethod]
         public void IfStatementWithoutBracesInTwoLineIsError() {
-            DiagnosticResult expected = CreateDiagnosticResult(7, 21, "if");
+            DiagnosticResult expected = CreateDiagnosticResult(7, 21, "return 1;");
             VerifyCSharpDiagnostic(Wrong2, expected);
         }
 
         [TestMethod]
         public void ElseStatementWithoutBracesInOneLineIsError() {
-            DiagnosticResult expected = CreateDiagnosticResult(8, 19, "else");
+            DiagnosticResult expected = CreateDiagnosticResult(8, 19, "else return 2;");
             VerifyCSharpDiagnostic(Wrong3, expected);
         }
 
         [TestMethod]
         public void ElseStatementWithoutBracesInTwoLineIsError() {
-            DiagnosticResult expected = CreateDiagnosticResult(8, 19, "else");
+            DiagnosticResult expected = CreateDiagnosticResult(8, 19, "else \r\n                    return 2;");
             VerifyCSharpDiagnostic(Wrong4, expected);
+        }
+
+        [TestMethod]
+         public void IfAndElseStatementWithoutBracesIsError() {
+            DiagnosticResult expected = CreateDiagnosticResult(6, 17, "if (Environment.MachineName == String.Empty) \r\n                    return 1;\r\n                else \r\n                    return 2;");
+            VerifyCSharpDiagnostic(Wrong5, expected);
         }
 
         [TestMethod]

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace CodingStandardCodeAnalyzers {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class IfStatementCodeAnalyzer : DiagnosticAnalyzer {
-        private static readonly LocalizableString Title = "Always use braces if IF and ELSE statements.";
+        private static readonly LocalizableString Title = "Always use braces if IF-THEN and IF-ELSE statements.";
         private static readonly LocalizableString MessageFormat = "Use braces in '{0}' statement.";
         private static readonly string Category = "Coding pratices";
 
@@ -29,17 +29,18 @@ namespace CodingStandardCodeAnalyzers {
         private void AnalyzeIfStatementDeclaration(SyntaxNodeAnalysisContext context) {
             var ifStatement = context.Node as IfStatementSyntax;
             if (ifStatement == null) { return; }
+            CSharpSyntaxNode errorLocation = null;
             StatementSyntax thenClause = ifStatement.Statement;
             if (thenClause != null && !(thenClause is BlockSyntax)) {
-                Diagnostic diagnostic = Diagnostic.Create(Rule, thenClause.GetLocation(), "if");
-                context.ReportDiagnostic(diagnostic);
+                errorLocation = thenClause;
             }
-
             ElseClauseSyntax elseClause = ifStatement.Else;
             if (elseClause != null && !(elseClause.Statement is BlockSyntax)) {
-                Diagnostic diagnostic = Diagnostic.Create(Rule, elseClause.GetLocation(), "else");
-                context.ReportDiagnostic(diagnostic);
+                errorLocation = errorLocation == null ? elseClause : (CSharpSyntaxNode)ifStatement;
             }
+            if (errorLocation == null) { return; }
+            Diagnostic diagnostic = Diagnostic.Create(Rule, errorLocation.GetLocation(), errorLocation.ToString());
+            context.ReportDiagnostic(diagnostic);
         }
     }
 }

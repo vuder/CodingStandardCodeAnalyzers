@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -10,7 +9,6 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
 
 namespace CodingStandardCodeAnalyzers {
@@ -62,22 +60,6 @@ namespace CodingStandardCodeAnalyzers {
             SyntaxTriviaList trailingTrivia = SyntaxTriviaList.Create(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " "));
             SyntaxToken privateSyntaxToken = SyntaxFactory.Token(leadingTrivia, SyntaxKind.PrivateKeyword, trailingTrivia);
             return privateSyntaxToken;
-        }
-    }
-
-    public static class CodeFixProviderHelper {
-        public static async Task<Document> ReplaceNodesInDocumentAsync(this CodeFixProvider codeFixProvider, Document document, CancellationToken cancellationToken, params Tuple<SyntaxNode, SyntaxNode>[] nodes) {
-            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
-            foreach (Tuple<SyntaxNode, SyntaxNode> node in nodes) {
-                root = root.ReplaceNode(node.Item1, node.Item2);
-            }
-            //TODO: check if needed.
-            SyntaxNode formattedRoot = Formatter.Format(root, Formatter.Annotation, document.Project.Solution.Workspace);
-            return document.WithSyntaxRoot(formattedRoot);
-        }
-
-        public static async Task<Document> ReplaceNodeInDocumentAsync(this CodeFixProvider codeFixProvider, Document document, CancellationToken cancellationToken, SyntaxNode oldNode, SyntaxNode newNode) {
-            return await ReplaceNodesInDocumentAsync(codeFixProvider, document, cancellationToken, new Tuple<SyntaxNode, SyntaxNode>(oldNode, newNode));
         }
     }
 }
