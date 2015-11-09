@@ -60,7 +60,7 @@ namespace CodingStandardCodeAnalyzers.Test {
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
-            public int Wrong4(){
+            public int Wrong5(){
                 if (Environment.MachineName == String.Empty) 
                     return 1;
                 else 
@@ -73,7 +73,7 @@ namespace CodingStandardCodeAnalyzers.Test {
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
-            public int Wrong4(){
+            public int Wrong6(){
                 if (Environment.MachineName == String.Empty) {
                     return 1;
                 }

@@ -48,8 +48,10 @@ namespace CodingStandardCodeAnalyzers {
             }
 
             StatementSyntax elseClause = ifStatement.Else?.Statement;
-            if (elseClause != null&& !(elseClause is BlockSyntax)) {
-                nodes.Add(new Tuple<SyntaxNode, SyntaxNode>(elseClause, SyntaxFactory.Block(elseClause)));
+            if (elseClause != null) {
+                if (elseClause is BlockSyntax == false && elseClause is IfStatementSyntax == false) {
+                    nodes.Add(new Tuple<SyntaxNode, SyntaxNode>(elseClause, SyntaxFactory.Block(elseClause)));
+                }
             }
             return await this.ReplaceNodesInDocumentAsync(document, cancellationToken, nodes.ToArray());
         }

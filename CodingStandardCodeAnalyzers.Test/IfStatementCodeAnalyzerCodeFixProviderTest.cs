@@ -72,12 +72,28 @@ namespace CodingStandardCodeAnalyzers.Test {
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
-            public int Wrong4(){
+            public int Wrong5(){
                 if (Environment.MachineName == String.Empty)
             {
                 return 1;
             }
             else
+            {
+                return 2;
+            }
+        }
+        }
+    }";
+
+        public static readonly string Fix6 = @"
+    using System;
+    namespace ConsoleApplication1 {
+        class TypeName {   
+            public int Wrong6(){
+                if (Environment.MachineName == String.Empty) {
+                    return 1;
+                }
+                else if (Environment.MachineName.Lenght > 2)
             {
                 return 2;
             }
@@ -107,8 +123,13 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
 
         [TestMethod]
-        public void IfAndElseStatementWithoutBracesFicIsCorrect() {
+        public void IfAndElseStatementWithoutBracesFixIsCorrect() {
             VerifyCSharpFix(IfStatementCodeAnalyzerTest.Wrong5, Fix5);
+        }
+
+        [TestMethod]
+        public void IfAndElseStatementWithoutBracesInElseIfStatementFixIsCorrect() {
+            VerifyCSharpFix(IfStatementCodeAnalyzerTest.Wrong6, Fix6);
         }
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() {
             return new IfStatementCodeAnalyzer();
