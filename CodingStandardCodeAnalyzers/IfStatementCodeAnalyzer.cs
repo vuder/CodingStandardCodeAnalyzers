@@ -23,10 +23,11 @@ namespace CodingStandardCodeAnalyzers {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context) {
-            context.RegisterSyntaxNodeAction(AnalyzeIfStatementDeclaration, SyntaxKind.IfStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeIfStatementDeclaration, SyntaxKind.IfStatement, SyntaxKind.ElseClause);
         }
 
         private void AnalyzeIfStatementDeclaration(SyntaxNodeAnalysisContext context) {
+            if (context.IsGeneratedOrNonUserCode()) { return; }
             var ifStatement = context.Node as IfStatementSyntax;
             if (ifStatement == null) { return; }
             CSharpSyntaxNode errorLocation = null;
@@ -35,8 +36,10 @@ namespace CodingStandardCodeAnalyzers {
                 errorLocation = thenClause;
             }
             ElseClauseSyntax elseClause = ifStatement.Else;
-            if (elseClause != null && !(elseClause.Statement is BlockSyntax)) {
-                errorLocation = errorLocation == null ? elseClause : (CSharpSyntaxNode)ifStatement;
+            if (elseClause != null) {
+                if (!(elseClause.Statement is BlockSyntax) && !(elseClause.Statement is IfStatementSyntax)) {
+                    errorLocation = errorLocation == null ? elseClause : (CSharpSyntaxNode)ifStatement;
+                }
             }
             if (errorLocation == null) { return; }
             Diagnostic diagnostic = Diagnostic.Create(Rule, errorLocation.GetLocation(), errorLocation.ToString());

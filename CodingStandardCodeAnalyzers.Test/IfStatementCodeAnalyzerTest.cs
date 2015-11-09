@@ -69,6 +69,20 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
+        public static readonly string Wrong6 = @"
+    using System;
+    namespace ConsoleApplication1 {
+        class TypeName {   
+            public int Wrong4(){
+                if (Environment.MachineName == String.Empty) {
+                    return 1;
+                }
+                else if (Environment.MachineName.Lenght > 2)
+                    return 2;
+            }
+        }
+    }";
+
         public static readonly string Correct1 = @"
     using System;
     namespace ConsoleApplication1 {
@@ -94,6 +108,21 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
+        public static readonly string Correct3 = @"
+    using System;
+    namespace ConsoleApplication1 {
+        class TypeName {   
+            public int Correct2(){
+                if (Environment.MachineName == String.Empty) {
+                    return 1;
+                } else if (Environment.MachineName.Lenght > 2) {
+                    return 2;
+                } else {
+                    return 3;
+                }
+            }
+        }
+    }";
         #endregion
 
         [TestMethod]
@@ -127,9 +156,15 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
 
         [TestMethod]
-         public void IfAndElseStatementWithoutBracesIsError() {
+        public void IfAndElseStatementWithoutBracesIsError() {
             DiagnosticResult expected = CreateDiagnosticResult(6, 17, "if (Environment.MachineName == String.Empty) \r\n                    return 1;\r\n                else \r\n                    return 2;");
             VerifyCSharpDiagnostic(Wrong5, expected);
+        }
+
+        [TestMethod]
+        public void IfAndElseStatementWithoutBracesInElseIfIsError() {
+            DiagnosticResult expected = CreateDiagnosticResult(10, 21, "return 2;");
+            VerifyCSharpDiagnostic(Wrong6, expected);
         }
 
         [TestMethod]
@@ -140,6 +175,11 @@ namespace CodingStandardCodeAnalyzers.Test {
         [TestMethod]
         public void IfAndElseStatementBracesInTwoLineIsCorrect() {
             VerifyCSharpDiagnostic(Correct2);
+        }
+
+        [TestMethod]
+        public void IfAndElseStatementBracesInElseIfIsCorrect() {
+            VerifyCSharpDiagnostic(Correct3);
         }
 
         private static DiagnosticResult CreateDiagnosticResult(int line, int column, string clause) {

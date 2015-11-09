@@ -32,8 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CodeFixProviderHelper.cs" />
+    <Compile Include="Extensions\CodeFixProviderHelper.cs" />
     <Compile Include="DateTimeClassUsageCodeAnalyzer.cs" />
+    <Compile Include="Extensions\ContextExtensions.cs" />
+    <Compile Include="Extensions\NodeExtensions.cs" />
+    <Compile Include="Extensions\SymbolExtensions.cs" />
+    <Compile Include="Extensions\SyntaxFactoryHelper.cs" />
     <Compile Include="FieldAccessCodeAnalyzerCodeFixProvider.cs" />
     <Compile Include="FieldAccessCodeAnalyzer.cs" />
     <Compile Include="IfStatementCodeAnalyzer.cs" />
@@ -116,6 +120,7 @@
   <ItemGroup>
     <Content Include="CodingStandardCodeAnalyzers.vssettings" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\v4.6\Microsoft.Portable.CSharp.targets" />
   <Target Name="AfterBuild">
     <GetAssemblyIdentity AssemblyFiles="$(OutDir)\$(AssemblyName).dll">
