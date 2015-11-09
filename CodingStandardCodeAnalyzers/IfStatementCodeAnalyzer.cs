@@ -37,7 +37,7 @@ namespace CodingStandardCodeAnalyzers {
             }
             ElseClauseSyntax elseClause = ifStatement.Else;
             if (elseClause != null) {
-                if (!(elseClause.Statement is BlockSyntax) && !(elseClause.Statement is IfStatementSyntax)) {
+                if (elseClause.Statement is BlockSyntax == false && elseClause.Statement is IfStatementSyntax == false) {
                     errorLocation = errorLocation == null ? elseClause : (CSharpSyntaxNode)ifStatement;
                 }
             }
