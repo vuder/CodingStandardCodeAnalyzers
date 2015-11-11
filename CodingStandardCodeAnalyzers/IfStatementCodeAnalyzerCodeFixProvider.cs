@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace CodingStandardCodeAnalyzers {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(IfStatementCodeAnalyzerCodeFixProvider)), Shared]
     public class IfStatementCodeAnalyzerCodeFixProvider : CodeFixProvider {
-        private const string CodeFixTitle = "Enclose clasue in { }";
+        private const string CodeFixTitle = "Enclose clause in { }";
 
         public string DiagnosticId => IfStatementCodeAnalyzer.DiagnosticId;
 

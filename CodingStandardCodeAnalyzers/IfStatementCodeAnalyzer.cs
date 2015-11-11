@@ -10,16 +10,17 @@ namespace CodingStandardCodeAnalyzers {
     public class IfStatementCodeAnalyzer : DiagnosticAnalyzer {
         private static readonly LocalizableString Title = "Always use braces if IF-THEN and IF-ELSE statements.";
         private static readonly LocalizableString MessageFormat = "Use braces in '{0}' statement.";
-        private static readonly string Category = "Coding pratices";
+        private static readonly string Category = AnalyzerDiagnosticCategories.CodingPractices;
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor("IfStatementCodeAnalyzer",
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(AnalyzerDiagnosticIds.IfStatementCodeAnalyzer.ToDiagnosticsId(),
             Title,
             MessageFormat,
             Category,
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-        public static readonly string DiagnosticId = "IfStatementCodeAnalyzer";
+        public static readonly string DiagnosticId = Rule.Id;
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context) {

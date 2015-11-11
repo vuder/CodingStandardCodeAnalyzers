@@ -12,11 +12,18 @@ namespace CodingStandardCodeAnalyzers {
         private static readonly LocalizableString Title = "Access modifier for the field is wrong.";
         private static readonly LocalizableString MessageFormat = "Field must be private.";
         private static readonly LocalizableString Description = "All fields must be private, the only exception is static readonly fields.";
-        private static readonly string Category = "Access";
+        private static readonly string Category = AnalyzerDiagnosticCategories.Access;
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor("FieldAccessCodeAnalyzer", Title, MessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(AnalyzerDiagnosticIds.FieldAccessCodeAnalyzer.ToDiagnosticsId(),
+            Title,
+            MessageFormat,
+            Category,
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: Description);
 
-        public static readonly string DiagnosticId = "FieldAccessCodeAnalyzer";
+        public static readonly string DiagnosticId = Rule.Id;
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context) {

@@ -9,12 +9,12 @@ namespace CodingStandardCodeAnalyzers {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DateTimeClassUsageCodeAnalyzer : DiagnosticAnalyzer {
         private static readonly LocalizableString Title = "Use of some methods of DateTime is not recommended.";
-        private static readonly LocalizableString MessageFormat = "Use of '{0}' is not recommended. Consider other options to achive what you need.";
+        private static readonly LocalizableString MessageFormat = "Use of '{0}' is not recommended. Consider other options to achieve what you need.";
         private static readonly LocalizableString Description = "";
-        private static readonly string Category = "Coding pratices";
-        private static readonly string HelpLink = "http://tinyurl.com/CaseAgainsDateTimeNow";
+        private static readonly string Category = AnalyzerDiagnosticCategories.CodingPractices;
+        private static readonly string HelpLink = @"http://tinyurl.com/CaseAgainsDateTimeNow";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor("DateTimeClassUsageCodeAnalyzer",
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(AnalyzerDiagnosticIds.DateTimeClassUsageCodeAnalyzer.ToDiagnosticsId(),
             Title,
             MessageFormat,
             Category,
@@ -24,6 +24,7 @@ namespace CodingStandardCodeAnalyzers {
             helpLinkUri: HelpLink);
 
         public static readonly string DiagnosticId = "DateTimeClassUsageCodeAnalyzer";
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context) {
