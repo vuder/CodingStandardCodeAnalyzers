@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingStandardCodeAnalyzers.Vsix", "CodingStandardCodeAnalyzers.Vsix\CodingStandardCodeAnalyzers.Vsix.csproj", "{C451D9A3-AF28-4022-9CF9-E5D2352292C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSamples", "CodeSamples\CodeSamples.csproj", "{3B0818D2-2394-4F63-9131-9832AF51DE31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C451D9A3-AF28-4022-9CF9-E5D2352292C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C451D9A3-AF28-4022-9CF9-E5D2352292C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C451D9A3-AF28-4022-9CF9-E5D2352292C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B0818D2-2394-4F63-9131-9832AF51DE31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B0818D2-2394-4F63-9131-9832AF51DE31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B0818D2-2394-4F63-9131-9832AF51DE31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B0818D2-2394-4F63-9131-9832AF51DE31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
