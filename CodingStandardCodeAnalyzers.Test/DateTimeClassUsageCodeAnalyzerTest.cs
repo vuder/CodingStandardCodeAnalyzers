@@ -13,7 +13,7 @@ using System;
 namespace DateTimeClassAnalyzerTest {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine(DateTime.Now );  
+            Console.WriteLine(DateTime.Now);  
         }
     }
 }";
@@ -34,7 +34,16 @@ using System;
 namespace DateTimeClassAnalyzerTest {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine(DateTime.Today );  
+            Console.WriteLine(DateTime.Today);  
+        }
+    }
+}";
+
+        public static readonly string Wrong4 = @"
+namespace DateTimeClassAnalyzerTest {
+    class Program {
+        static void Main(string[] args) {
+            Console.WriteLine(System.DateTime.Today);  
         }
     }
 }";
@@ -84,6 +93,12 @@ namespace DateTimeClassAnalyzerTest {
         }
 
         [TestMethod]
+        public void UseOfDateTimeWithNamespaceIsError() {
+            DiagnosticResult expected = CreateDiagnosticResult(5, 47, "Today");
+            VerifyCSharpDiagnostic(Wrong4, expected);
+        }
+
+        [TestMethod]
         public void UseOfNowPropertyInOtherClassIsCorrect() {
             VerifyCSharpDiagnostic(Correct1);
         }
@@ -96,7 +111,7 @@ namespace DateTimeClassAnalyzerTest {
         private static DiagnosticResult CreateDiagnosticResult(int line, int column, string methodName) {
             return new DiagnosticResult {
                 Id = "DateTimeClassUsageCodeAnalyzer",
-                Message = $"Use of 'DateTime.{methodName}' is not recommended. Consider other options to achive what you need.",
+                Message = $"Use of 'DateTime.{methodName}' is not recommended. Consider other options to achieve what you need.",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", line, column) }
             };

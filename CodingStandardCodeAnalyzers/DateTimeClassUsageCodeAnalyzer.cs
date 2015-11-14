@@ -23,7 +23,7 @@ namespace CodingStandardCodeAnalyzers {
             description: Description,
             helpLinkUri: HelpLink);
 
-        public static readonly string DiagnosticId = "DateTimeClassUsageCodeAnalyzer";
+        public static readonly string DiagnosticId = Rule.Id;
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

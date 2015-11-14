@@ -35,6 +35,7 @@
     <Compile Include="Common\AnalyzerDiagnosticIdsExtensions.cs" />
     <Compile Include="Common\AnalyzerDiagnosticIds.cs" />
     <Compile Include="Common\AnalyzerDiagnosticCategories.cs" />
+    <Compile Include="DateTimeClassUsageCodeAnalyzerCodeFixProvider.cs" />
     <Compile Include="Extensions\CodeFixProviderHelper.cs" />
     <Compile Include="DateTimeClassUsageCodeAnalyzer.cs" />
     <Compile Include="Extensions\ContextExtensions.cs" />

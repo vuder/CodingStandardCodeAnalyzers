@@ -6,10 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace CodingStandardCodeAnalyzers {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FieldAccessCodeAnalyzerCodeFixProvider))]
@@ -24,18 +22,7 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context) {
-            SyntaxNode root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-            Diagnostic diagnostic = context.Diagnostics.First();
-            TextSpan diagnosticSpan = diagnostic.Location.SourceSpan;
-
-            FieldDeclarationSyntax declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
-            context.RegisterCodeFix(
-                 CodeAction.Create(
-                     title: CodeFixTitle,
-                     createChangedDocument: cancellationToken => MakePrivateAsync(context.Document, declaration, cancellationToken),
-                     equivalenceKey: CodeFixTitle),
-                 diagnostic);
+            await context.RegisterCodeFixAsync<FieldDeclarationSyntax>(CodeFixTitle, MakePrivateAsync);
         }
 
         private async Task<Document> MakePrivateAsync(Document document, FieldDeclarationSyntax fieldDeclaration, CancellationToken cancellationToken) {
