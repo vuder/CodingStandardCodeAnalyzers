@@ -15,6 +15,9 @@ namespace CodeSamples {
             var today = Now.Date;
             return today;
         }
+        public DateTime Wrong4() {
+            return System.DateTime.Now;
+        }
 
         /****************** CORRECT ************************************/
 

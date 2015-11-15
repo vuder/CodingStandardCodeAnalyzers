@@ -36,7 +36,7 @@ using System;
 namespace DateTimeClassAnalyzerTest {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine(DateTimeOffset.Today);  
+            Console.WriteLine(DateTimeOffset.Now.Date);  
         }
     }
 }";
@@ -46,7 +46,7 @@ namespace DateTimeClassAnalyzerTest {
 namespace DateTimeClassAnalyzerTest {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine(DateTimeOffset.Today);  
+            Console.WriteLine(DateTimeOffset.Now.Date);  
         }
     }
 }";

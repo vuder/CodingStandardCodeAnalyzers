@@ -13,6 +13,9 @@ public class DateTimeAnalyzerSamples {
         var today = DateTime.Now.Date;
         return today;
     }
+    public DateTime Wrong4() {
+        return System.DateTime.Now;
+    }
 
     /****************** CORRECT ************************************/
 
@@ -21,9 +24,6 @@ public class DateTimeAnalyzerSamples {
     }
     public DateTimeOffset Correct2() {
         return DateTimeOffset.Now;
-    }
-    public DateTime Correct3() {
-        return DateTime.Today;
     }
 }
 

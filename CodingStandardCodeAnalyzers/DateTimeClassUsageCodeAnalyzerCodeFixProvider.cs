@@ -34,7 +34,7 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         private async Task<Document> ReplaceWrongDateTimeUsageWithDateTimeOffset(Document document, IdentifierNameSyntax node, CancellationToken cancellationToken) {
-            return await ApplyReplacement(document, node, cancellationToken, "DateTimeOffset." + node.ToString(), "System");
+            return await ApplyReplacement(document, node, cancellationToken, "DateTimeOffset.Now" + (node.ToString() == "Today" ? ".Date" : ""), "System");
         }
 
         private async Task<Document> ApplyReplacement(Document document, IdentifierNameSyntax node, CancellationToken cancellationToken, string replaceWithName, string namespaceUsed) {
