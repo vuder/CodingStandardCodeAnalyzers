@@ -39,7 +39,7 @@ namespace CodingStandardCodeAnalyzers {
             return document.WithSyntaxRoot(root);
         }
 
-        public static async Task<RegisterCodeFixesAsyncContinuation<T>> RegisterCodeFixAsync<T>(this CodeFixContext context, string codeFixTitle, Func<Document, T, CancellationToken, Task<Document>> executeFixAsync) where T : SyntaxNode {
+        public static async Task<RegisterCodeFixesContinuationData<T>> RegisterCodeFixAsync<T>(this CodeFixContext context, string codeFixTitle, Func<Document, T, CancellationToken, Task<Document>> executeFixAsync) where T : SyntaxNode {
             SyntaxNode root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
             Diagnostic diagnostic = context.Diagnostics.First();
@@ -47,7 +47,7 @@ namespace CodingStandardCodeAnalyzers {
 
             T statement = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<T>().First();
             RegisterCodeFix(context, codeFixTitle, executeFixAsync, statement, diagnostic);
-            return new RegisterCodeFixesAsyncContinuation<T>(context, statement, diagnostic);
+            return new RegisterCodeFixesContinuationData<T>(context, statement, diagnostic);
         }
 
         private static void RegisterCodeFix<T>(CodeFixContext context, string codeFixTitle, Func<Document, T, CancellationToken, Task<Document>> executeFixAsync, T statement, Diagnostic diagnostic) where T : SyntaxNode {
@@ -59,17 +59,18 @@ namespace CodingStandardCodeAnalyzers {
                 diagnostic);
         }
 
-        public static RegisterCodeFixesAsyncContinuation<T> RegisterAdditionalCodeFixes<T>(this RegisterCodeFixesAsyncContinuation<T> info, string codeFixTitle, Func<Document, T, CancellationToken, Task<Document>> executeFixAsync) where T : SyntaxNode {
+        public static RegisterCodeFixesContinuationData<T> RegisterAdditionalCodeFixes<T>(this RegisterCodeFixesContinuationData<T> info, string codeFixTitle, Func<Document, T, CancellationToken, Task<Document>> executeFixAsync) where T : SyntaxNode {
+            if (info.Context.CancellationToken.IsCancellationRequested) { return info; }
             RegisterCodeFix(info.Context, codeFixTitle, executeFixAsync, info.Statement, info.Diagnostic);
             return info;
         }
 
-        public class RegisterCodeFixesAsyncContinuation<T> where T : SyntaxNode {
+        public class RegisterCodeFixesContinuationData<T> where T : SyntaxNode {
             public CodeFixContext Context { get; }
             public T Statement { get; }
             public Diagnostic Diagnostic { get; }
 
-            public RegisterCodeFixesAsyncContinuation(CodeFixContext context, T statement, Diagnostic diagnostic) {
+            public RegisterCodeFixesContinuationData(CodeFixContext context, T statement, Diagnostic diagnostic) {
                 Context = context;
                 Statement = statement;
                 Diagnostic = diagnostic;

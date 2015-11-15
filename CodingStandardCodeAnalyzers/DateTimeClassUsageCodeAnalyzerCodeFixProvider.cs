@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,9 +28,9 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context) {
-            (await context.RegisterCodeFixAsync<IdentifierNameSyntax>(CodeFixTitleForReplaceWithDateTimeOffsetMember, ReplaceWrongDateTimeUsageWithDateTimeOffset))
-                .RegisterAdditionalCodeFixes(CodeFixTitleForReplaceWithNodeTime, ReplaceWrongDateTimeUsageWithNodaTimeEquivalent)
-                .RegisterAdditionalCodeFixes(CodeFixTitleForUseStopwatch, ReplaceWrongDateTimeUsageWithStopwatch);
+            var registerFixData = await context.RegisterCodeFixAsync<IdentifierNameSyntax>(CodeFixTitleForReplaceWithDateTimeOffsetMember, ReplaceWrongDateTimeUsageWithDateTimeOffset);
+            registerFixData.RegisterAdditionalCodeFixes(CodeFixTitleForReplaceWithNodeTime, ReplaceWrongDateTimeUsageWithNodaTimeEquivalent);
+            registerFixData.RegisterAdditionalCodeFixes(CodeFixTitleForUseStopwatch, ReplaceWrongDateTimeUsageWithStopwatch);
         }
 
         private async Task<Document> ReplaceWrongDateTimeUsageWithDateTimeOffset(Document document, IdentifierNameSyntax node, CancellationToken cancellationToken) {
@@ -53,8 +54,9 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         private async Task<Document> ReplaceWrongDateTimeUsageWithStopwatch(Document document, IdentifierNameSyntax node, CancellationToken cancellationToken) {
-            var nodes = new List<Tuple<SyntaxNode, SyntaxNode>>();
-            return await this.ReplaceNodesInDocumentAsync(document, cancellationToken, nodes.ToArray());
+            string replacement = $"Stopwatch timer = Stopwatch.StartNew();{Environment.NewLine}// Tested code here" +
+                                 $"{Environment.NewLine}timer.Stop();{Environment.NewLine} Console.WriteLine(\"Elapsed Time: {0} ms\", timer.ElapsedMilliseconds);";
+            return await ApplyReplacement(document, node, cancellationToken, replacement, "System.Diagnostics");
         }
     }
 }
