@@ -8,7 +8,7 @@ namespace CodingStandardCodeAnalyzers.Test {
     [TestClass]
     public class IfStatementCodeAnalyzerCodeFixProviderTest : CodeFixVerifier {
         #region Code samples
-        public static readonly string Fix1 = @"
+        private static readonly string Fix1 = @"
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
@@ -23,7 +23,7 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
-        public static readonly string Fix2 = @"
+        private static readonly string Fix2 = @"
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
@@ -38,7 +38,7 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
-        public static readonly string Fix3 = @"
+        private static readonly string Fix3 = @"
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
@@ -53,7 +53,7 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
-        public static readonly string Fix4 = @"
+        private static readonly string Fix4 = @"
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
@@ -68,7 +68,7 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
-        public static readonly string Fix5 = @"
+        private static readonly string Fix5 = @"
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
@@ -85,7 +85,7 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
     }";
 
-        public static readonly string Fix6 = @"
+        private static readonly string Fix6 = @"
     using System;
     namespace ConsoleApplication1 {
         class TypeName {   
@@ -113,7 +113,7 @@ namespace CodingStandardCodeAnalyzers.Test {
         }
 
         [TestMethod]
-        public void ElseStatementWithoutBracesInOneLineFixIsCirrect() {
+        public void ElseStatementWithoutBracesInOneLineFixIsCorrect() {
             VerifyCSharpFix(IfStatementCodeAnalyzerTest.Wrong3, Fix3);
         }
 
