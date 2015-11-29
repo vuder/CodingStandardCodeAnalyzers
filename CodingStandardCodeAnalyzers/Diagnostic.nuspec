@@ -6,7 +6,7 @@
     <title>Coding standard code analyzers library</title>
     <authors>Oleksii Temekunidi</authors>
     <owners>Oleksii Temekunidi</owners>
-    <licenseUrl></licenseUrl>
+    <!--<licenseUrl></licenseUrl>-->
     <projectUrl>https://github.com/vuder/CodingStandardCodeAnalyzers</projectUrl>
     <iconUrl>http://emoji.fileformat.info/gemoji/beer.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
