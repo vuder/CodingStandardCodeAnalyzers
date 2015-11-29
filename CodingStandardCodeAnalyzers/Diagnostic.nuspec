@@ -3,16 +3,16 @@
   <metadata>
     <id>CodingStandardCodeAnalyzers</id>
     <version>1.0.0.0</version>
-    <title>CodingStandardCodeAnalyzers</title>
-    <authors>Vuder</authors>
-    <owners>Vuder</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <title>Coding standard code analyzers library</title>
+    <authors>Oleksii Temekunidi</authors>
+    <owners>Oleksii Temekunidi</owners>
+    <licenseUrl></licenseUrl>
+    <projectUrl>https://github.com/vuder/CodingStandardCodeAnalyzers</projectUrl>
+    <iconUrl>http://emoji.fileformat.info/gemoji/beer.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>CodingStandardCodeAnalyzers</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
-    <copyright>Copyright</copyright>
+    <description>Coding Standard Code Analyzers examples</description>
+    <releaseNotes>Initial test version.</releaseNotes>
+    <copyright>Copyright Oleksii Temekunidi 2015</copyright>
     <tags>CodingStandardCodeAnalyzers, analyzers</tags>
   </metadata>
   <!-- The convention for analyzers is to put language agnostic dlls in analyzers\dotnet and language specific analyzers in either analyzers\dotnet\cs or analyzers\dotnet\vb -->
