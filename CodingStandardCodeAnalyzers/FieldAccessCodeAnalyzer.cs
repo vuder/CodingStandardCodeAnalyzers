@@ -31,6 +31,7 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         private static void AnalyzeFieldDeclaration(SyntaxNodeAnalysisContext context) {
+            if (context.IsGeneratedOrNonUserCode()) { return; }
             var fieldDeclaration = (FieldDeclarationSyntax)context.Node;
             if (IsStaticReadonlyField(fieldDeclaration)) { return; }
 

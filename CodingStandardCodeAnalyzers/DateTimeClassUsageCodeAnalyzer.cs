@@ -32,6 +32,7 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         private void AnalyzeDateTimeUsage(SyntaxNodeAnalysisContext context) {
+            if (context.IsGeneratedOrNonUserCode()) { return; }
             var expression = context.Node as IdentifierNameSyntax;
             if (expression == null || context.SemanticModel == null) { return; }
             SymbolInfo diagnostics = context.SemanticModel.GetSymbolInfo(expression);
