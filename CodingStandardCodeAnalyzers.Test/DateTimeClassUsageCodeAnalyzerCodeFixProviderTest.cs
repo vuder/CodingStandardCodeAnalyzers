@@ -9,7 +9,7 @@ namespace CodingStandardCodeAnalyzers.Test {
     [TestClass]
     public class DateTimeClassUsageCodeAnalyzerCodeFixProviderTest : CodeFixVerifier {
         #region Code samples
-        public static readonly string Fix1ForDateTimeOffset = @"
+        private static readonly string Fix1ForDateTimeOffset = @"
 using System;
 namespace DateTimeClassAnalyzerTest {
     class Program {
@@ -19,8 +19,7 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
-
-        public static readonly string Fix2ForDateTimeOffset = @"
+        private static readonly string Fix2ForDateTimeOffset = @"
 using System;
 using static System.DateTime;
 namespace DateTimeClassAnalyzerTest {
@@ -31,7 +30,7 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
-        public static readonly string Fix3ForDateTimeOffset = @"
+        private static readonly string Fix3ForDateTimeOffset = @"
 using System;
 namespace DateTimeClassAnalyzerTest {
     class Program {
@@ -41,7 +40,7 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
-        public static readonly string Fix4ForDateTimeOffset = @"using System;
+        private static readonly string Fix4ForDateTimeOffset = @"using System;
 
 namespace DateTimeClassAnalyzerTest {
     class Program {
@@ -51,8 +50,7 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
-
-        public static readonly string Fix1ForNodaTime = @"
+        private static readonly string Fix1ForNodaTime = @"
 using System;
 using NodaTime;
 
@@ -64,8 +62,7 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
-
-        public static readonly string Fix2ForNodaTime = @"
+        private static readonly string Fix2ForNodaTime = @"
 using System;
 using static System.DateTime;
 using NodaTime;
@@ -78,7 +75,7 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
-        public static readonly string Fix3ForNodaTime = @"
+        private static readonly string Fix3ForNodaTime = @"
 using System;
 using NodaTime;
 
@@ -90,7 +87,7 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
-        public static readonly string Fix4ForNodaTime = @"using NodaTime;
+        private static readonly string Fix4ForNodaTime = @"using NodaTime;
 
 namespace DateTimeClassAnalyzerTest {
     class Program {
@@ -99,22 +96,6 @@ namespace DateTimeClassAnalyzerTest {
         }
     }
 }";
-
-        public static readonly string Fix1ForStopwatch = @"
-using System;
-using System.Diagnostics;
-
-namespace DateTimeClassAnalyzerTest {
-    class Program {
-        static void Main(string[] args) {
-            Console.WriteLine(Stopwatch timer = Stopwatch.StartNew();
-// Tested code here
-timer.Stop();
- Console.WriteLine(""Elapsed Time: 0 ms"", timer.ElapsedMilliseconds););  
-        }
-    }
-}";
-
         #endregion
 
         [TestMethod]
@@ -155,11 +136,6 @@ timer.Stop();
         [TestMethod]
         public void UseOfDateTimeWithNamespaceReplaceWithNodaTimeFixCheck() {
             VerifyCSharpFix(DateTimeClassUsageCodeAnalyzerTest.Wrong4, Fix4ForNodaTime, 1);
-        }
-
-        [TestMethod]
-        public void UseOfDateTimeWithNamespaceReplaceWithStopwatchFixCheck() {
-            VerifyCSharpFix(DateTimeClassUsageCodeAnalyzerTest.Wrong1, Fix1ForStopwatch, 2);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() {

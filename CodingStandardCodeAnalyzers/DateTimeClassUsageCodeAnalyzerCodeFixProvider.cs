@@ -28,7 +28,6 @@ namespace CodingStandardCodeAnalyzers {
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context) {
             var registerFixData = await context.RegisterCodeFixAsync<IdentifierNameSyntax>(CodeFixTitleForReplaceWithDateTimeOffsetMember, ReplaceWrongDateTimeUsageWithDateTimeOffset);
             registerFixData.RegisterAdditionalCodeFixes(CodeFixTitleForReplaceWithNodeTime, ReplaceWrongDateTimeUsageWithNodaTimeEquivalent);
-            registerFixData.RegisterAdditionalCodeFixes(CodeFixTitleForUseStopwatch, ReplaceWrongDateTimeUsageWithStopwatch);
         }
 
         private async Task<Document> ReplaceWrongDateTimeUsageWithDateTimeOffset(Document document, IdentifierNameSyntax node, CancellationToken cancellationToken) {
@@ -49,12 +48,6 @@ namespace CodingStandardCodeAnalyzers {
             string replacement = node.ToString() == "Today" ? "SystemClock.Instance.Now.InZone(DateTimeZoneProviders.Tzdb.GetSystemDefault()).Date"
                                                             : "SystemClock.Instance.Now";
             return await ApplyReplacement(document, node, cancellationToken, replacement, "NodaTime");
-        }
-
-        private async Task<Document> ReplaceWrongDateTimeUsageWithStopwatch(Document document, IdentifierNameSyntax node, CancellationToken cancellationToken) {
-            string replacement = $"Stopwatch timer = Stopwatch.StartNew();{Environment.NewLine}// Tested code here" +
-                                 $"{Environment.NewLine}timer.Stop();{Environment.NewLine} Console.WriteLine(\"Elapsed Time: {0} ms\", timer.ElapsedMilliseconds);";
-            return await ApplyReplacement(document, node, cancellationToken, replacement, "System.Diagnostics");
         }
     }
 }
