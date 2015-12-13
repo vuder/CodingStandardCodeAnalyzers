@@ -39,7 +39,7 @@ namespace CodingStandardCodeAnalyzers {
                 new SearchMethodInfo("System", "DateTime", "Now"),
                 new SearchMethodInfo("System", "DateTime", "Today")
             };
-            var symbol = node.CheckNodeIsMemberOfType(context, methodsToSearch);
+            var symbol = node.CheckNodeIsMemberOfType(context.SemanticModel, methodsToSearch);
             if (symbol == null) { return; }
             Diagnostic diagnostic = Diagnostic.Create(Rule, node.GetLocation(), $"{symbol.ContainingType.Name}.{symbol.Name}");
             context.ReportDiagnostic(diagnostic);

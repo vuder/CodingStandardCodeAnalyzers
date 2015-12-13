@@ -13,7 +13,7 @@ namespace CodeSamples
             var start = DateTimeOffset.Now;
             //do something
             System.Threading.Thread.Sleep(1000);
-            var elapsed = DateTimeOffset.Now - start;
+            var elapsed = DateTimeOffset.Now - start;//test
         }
     }
 }

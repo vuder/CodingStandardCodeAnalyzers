@@ -107,6 +107,7 @@
     <Compile Include="FieldAccessCodeAnalyzerCodeFixProviderTest.cs" />
     <Compile Include="IfStatementCodeAnalyzerCodeFixProviderTest.cs" />
     <Compile Include="IfStatementCodeAnalyzerTest.cs" />
+    <Compile Include="TimeMeasurementCodeAnalyzerCodeFixProviderTest.cs" />
     <Compile Include="TimeMeasurementCodeAnalyzerTest.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />

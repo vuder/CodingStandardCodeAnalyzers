@@ -23,9 +23,9 @@ namespace CodingStandardCodeAnalyzers {
     [DebuggerDisplay("nonUserAttributeRegex={nonUserAttributeRegex}")]
     public static class NodeExtensions {
 
-        public static ISymbol CheckNodeIsMemberOfType(this SyntaxNode node, SyntaxNodeAnalysisContext context, IEnumerable<SearchMethodInfo> membersToSearch) {
-            if (node == null || context.SemanticModel == null) { return null; }
-            SymbolInfo diagnostics = context.SemanticModel.GetSymbolInfo(node);
+        public static ISymbol CheckNodeIsMemberOfType(this SyntaxNode node, SemanticModel semanticModel, IEnumerable<SearchMethodInfo> membersToSearch) {
+            if (node == null || semanticModel == null) { return null; }
+            SymbolInfo diagnostics = semanticModel.GetSymbolInfo(node);
             ISymbol symbol = diagnostics.Symbol;
             if (symbol?.ContainingType?.ContainingNamespace == null) { return null; }
             foreach (SearchMethodInfo methodInfo in membersToSearch) {

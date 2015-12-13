@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,6 @@ namespace CodingStandardCodeAnalyzers {
     public class DateTimeClassUsageCodeAnalyzerCodeFixProvider : CodeFixProvider {
         private const string CodeFixTitleForReplaceWithDateTimeOffsetMember = "Replace with equivalent DateTimeOffset member";
         private const string CodeFixTitleForReplaceWithNodeTime = "Replace with equivalent NodaTime member";
-        private const string CodeFixTitleForUseStopwatch = "Use Stopwatch to measure elapsed time";
 
         public string DiagnosticId => DateTimeClassUsageCodeAnalyzer.DiagnosticId;
 

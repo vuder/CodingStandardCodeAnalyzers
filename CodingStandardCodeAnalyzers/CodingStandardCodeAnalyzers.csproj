@@ -54,6 +54,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="TimeMeasurementCodeAnalyzer.cs" />
+    <Compile Include="TimeMeasurementCodeAnalyzerCodeFixProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
