@@ -1,10 +1,10 @@
 namespace CodingStandardCodeAnalyzers {
-    public struct SearchMethodInfo {
+    public struct SearchMemberInfo {
         public string Namespace { get; private set; }
         public string ClassName { get; private set; }
         public string MemberName { get; private set; }
 
-        public SearchMethodInfo(string @namespace, string className, string memberName) {
+        public SearchMemberInfo(string @namespace, string className, string memberName) {
             Namespace = @namespace;
             ClassName = className;
             MemberName = memberName;

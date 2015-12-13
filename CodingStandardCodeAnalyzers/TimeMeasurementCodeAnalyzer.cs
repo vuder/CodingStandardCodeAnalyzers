@@ -10,10 +10,10 @@ namespace CodingStandardCodeAnalyzers {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TimeMeasurementCodeAnalyzer : DiagnosticAnalyzer {
         private static readonly LocalizableString Title = "Use Stopwatch to measure elapsed time.";
-        private static readonly LocalizableString MessageFormat = "Use Stopwatch to measure elapsed time instead of '{0}()'.";
+        private static readonly LocalizableString MessageFormat = "Use Stopwatch to measure elapsed time instead of '{0}'.";
         private static readonly LocalizableString Description = "";
         private static readonly string Category = AnalyzerDiagnosticCategories.CodingPractices;
-        private static readonly string HelpLink = "";
+        private static readonly string HelpLink = @"http://tinyurl.com/CaseAgainsDateTimeNow";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(AnalyzerDiagnosticIds.TimeMeasurementCodeAnalyzer.ToDiagnosticsId(),
             Title,
@@ -37,17 +37,17 @@ namespace CodingStandardCodeAnalyzers {
             var methodDeclaration = context.Node as MethodDeclarationSyntax;
             if (methodDeclaration == null || context.SemanticModel == null) { return; }
 
-            //Get all nodes where a method that return current time is invoked
+            //Get all nodes where a member that return current time is invoked
             var getTimeNodes = GetNodesUsedToGetCurrentTime(context.SemanticModel, methodDeclaration);
 
-            //if a method has less than 2 get current time expression - the time measurement not applicable
-            //if a method has more than 2 get current time expression - the analyzer need to handle this, but this is a bit more complicated. Room for improvement....
+            //if a member has less than 2 get current time expression - the time measurement not applicable
+            //if a member has more than 2 get current time expression - the analyzer need to handle this, but this is a bit more complicated. Room for improvement....
             if (getTimeNodes.Length != 2) { return; }
 
             SyntaxNode firstGetTimeNode = getTimeNodes[0];
             SyntaxNode secondGetTimeNode = getTimeNodes[1];
 
-            //both expressions have to call one method to get current time e.g. both should call DateTimeOffset.UtcNow()
+            //both expressions have to call one member to get current time e.g. both should call DateTimeOffset.UtcNow
             if (firstGetTimeNode.ToString() != secondGetTimeNode.ToString()) { return; }
 
             //first expression must be assignment of variable
@@ -77,13 +77,13 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         private static bool IsTimeGetterStatement(SyntaxNode node, SemanticModel semanticModel) {
-            var methodsToSearch = new[] {
-                new SearchMethodInfo("System", "DateTime", "Now"),
-                new SearchMethodInfo("System", "DateTime", "UtcNow"),
-                new SearchMethodInfo("System", "DateTimeOffset", "Now"),
-                new SearchMethodInfo("System", "DateTimeOffset", "UtcNow")
+            var membersToSearch = new[] {
+                new SearchMemberInfo("System", "DateTime", "Now"),
+                new SearchMemberInfo("System", "DateTime", "UtcNow"),
+                new SearchMemberInfo("System", "DateTimeOffset", "Now"),
+                new SearchMemberInfo("System", "DateTimeOffset", "UtcNow")
             };
-            return node.CheckNodeIsMemberOfType(semanticModel, methodsToSearch) != null;
+            return node.CheckNodeIsMemberOfType(semanticModel, membersToSearch) != null;
         }
 
         private bool AreSameSemantically(SyntaxNode node1, SyntaxNode node2, SyntaxNodeAnalysisContext context) {

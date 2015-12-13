@@ -52,10 +52,10 @@
     <Compile Include="TimeMeasurementSamples.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\CodingStandardCodeAnalyzers.Vsix\bin\Debug\CodingStandardCodeAnalyzers.dll" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Analyzer Include="packages\CodingStandardCodeAnalyzers.1.0.5825.31063\analyzers\dotnet\cs\CodingStandardCodeAnalyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

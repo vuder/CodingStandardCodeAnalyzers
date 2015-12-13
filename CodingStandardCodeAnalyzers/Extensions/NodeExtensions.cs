@@ -23,12 +23,12 @@ namespace CodingStandardCodeAnalyzers {
     [DebuggerDisplay("nonUserAttributeRegex={nonUserAttributeRegex}")]
     public static class NodeExtensions {
 
-        public static ISymbol CheckNodeIsMemberOfType(this SyntaxNode node, SemanticModel semanticModel, IEnumerable<SearchMethodInfo> membersToSearch) {
+        public static ISymbol CheckNodeIsMemberOfType(this SyntaxNode node, SemanticModel semanticModel, IEnumerable<SearchMemberInfo> membersToSearch) {
             if (node == null || semanticModel == null) { return null; }
             SymbolInfo diagnostics = semanticModel.GetSymbolInfo(node);
             ISymbol symbol = diagnostics.Symbol;
             if (symbol?.ContainingType?.ContainingNamespace == null) { return null; }
-            foreach (SearchMethodInfo methodInfo in membersToSearch) {
+            foreach (SearchMemberInfo methodInfo in membersToSearch) {
                 if (symbol.ContainingType.ContainingNamespace.Name != methodInfo.Namespace) {
                     continue;
                 }

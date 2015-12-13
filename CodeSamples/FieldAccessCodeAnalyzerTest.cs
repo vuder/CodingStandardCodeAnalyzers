@@ -16,7 +16,7 @@ namespace CodeSamples {
 
         public static string Wrong6;
 
-        public virtual string Wrong7;
+       // public virtual string Wrong7;
 
         /****************** CORRECT ************************************/
 

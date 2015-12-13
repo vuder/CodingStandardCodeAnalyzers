@@ -133,37 +133,37 @@ namespace DateTimeClassAnalyzerTest {
 
         [TestMethod]
         public void UseOfOneDateTimeNowForTimeMeasurementIsWrong1() {
-            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "DateTime.Now");
+            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "System.DateTime.Now");
             VerifyCSharpDiagnostic(Wrong1, expected);
         }
 
         [TestMethod]
         public void UseOfOneDateTimeNowForTimeMeasurementIsWrong2() {
-            DiagnosticResult expected = CreateDiagnosticResult(9, 29, "DateTime.Now");
+            DiagnosticResult expected = CreateDiagnosticResult(9, 29, "System.DateTime.Now");
             VerifyCSharpDiagnostic(Wrong2, expected);
         }
 
         [TestMethod]
         public void UseOfOneDateTimeNowWithStaticUsingForTimeMeasurementIsWrong() {
-            DiagnosticResult expected = CreateDiagnosticResult(10, 29, "DateTime.Now");
+            DiagnosticResult expected = CreateDiagnosticResult(10, 29, "System.DateTime.Now");
             VerifyCSharpDiagnostic(Wrong3, expected);
         }
 
         [TestMethod]
         public void UseOfOneDateTimeUtcNowForTimeMeasurementIsWrong() {
-            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "DateTime.UtcNow");
+            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "System.DateTime.UtcNow");
             VerifyCSharpDiagnostic(Wrong4, expected);
         }
 
         [TestMethod]
         public void UseOfOneDateTimeOffsetUtcNowForTimeMeasurementIsWrong() {
-            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "DateTimeOffset.UtcNow");
+            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "System.DateTimeOffset.UtcNow");
             VerifyCSharpDiagnostic(Wrong5, expected);
         }
 
         [TestMethod]
         public void UseOfOneDateTimeOffsetNowForTimeMeasurementIsWrong() {
-            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "DateTimeOffset.Now");
+            DiagnosticResult expected = CreateDiagnosticResult(9, 27, "System.DateTimeOffset.Now");
             VerifyCSharpDiagnostic(Wrong6, expected);
         }
 
@@ -182,10 +182,10 @@ namespace DateTimeClassAnalyzerTest {
             VerifyCSharpDiagnostic(Correct3);
         }
         
-        private static DiagnosticResult CreateDiagnosticResult(int line, int column, string method) {
+        private static DiagnosticResult CreateDiagnosticResult(int line, int column, string member) {
             return new DiagnosticResult {
                 Id = "TimeMeasurementCodeAnalyzer",
-                Message = $"Use Stopwatch to measure elapsed time instead of 'System.{method}()'.",
+                Message = $"Use Stopwatch to measure elapsed time instead of '{member}'.",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", line, column) }
             };

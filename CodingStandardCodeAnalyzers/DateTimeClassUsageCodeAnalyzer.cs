@@ -35,11 +35,11 @@ namespace CodingStandardCodeAnalyzers {
             if (context.IsGeneratedOrNonUserCode()) { return; }
             var node = context.Node as IdentifierNameSyntax;
 
-            var methodsToSearch = new[] {
-                new SearchMethodInfo("System", "DateTime", "Now"),
-                new SearchMethodInfo("System", "DateTime", "Today")
+            var membersToSearch = new[] {
+                new SearchMemberInfo("System", "DateTime", "Now"),
+                new SearchMemberInfo("System", "DateTime", "Today")
             };
-            var symbol = node.CheckNodeIsMemberOfType(context.SemanticModel, methodsToSearch);
+            var symbol = node.CheckNodeIsMemberOfType(context.SemanticModel, membersToSearch);
             if (symbol == null) { return; }
             Diagnostic diagnostic = Diagnostic.Create(Rule, node.GetLocation(), $"{symbol.ContainingType.Name}.{symbol.Name}");
             context.ReportDiagnostic(diagnostic);
