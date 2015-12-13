@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -99,6 +97,33 @@ namespace DateTimeClassAnalyzerTest {
     }
 }";
 
+        public static readonly string Correct2 = @"
+using System;
+namespace DateTimeClassAnalyzerTest {
+    class Program {
+        static void Main(string[] args) {
+            var start = DateTimeOffset.Now;
+            var start1 = DateTimeOffset.Now
+            //do something
+            System.Threading.Thread.Sleep(1000);  
+            var elapsed = DateTimeOffset.Now - start;
+        }
+    }
+}";
+
+        public static readonly string Correct3 = @"
+using System;
+namespace DateTimeClassAnalyzerTest {
+    class Program {
+        static void Main(string[] args) {
+            var start = DateTimeOffset.Now;
+            //do something
+            System.Threading.Thread.Sleep(1000);  
+            var elapsed = DateTimeOffset.UtcNow - start;
+        }
+    }
+}";
+
         #endregion
 
         [TestMethod]
@@ -145,6 +170,16 @@ namespace DateTimeClassAnalyzerTest {
         [TestMethod]
         public void UseOfOneDateTimeNowIsCorrect() {
             VerifyCSharpDiagnostic(Correct1);
+        }
+
+        [TestMethod]
+        public void UseOfGetCurrentTimeMoreThanTwoTimesIsCorrect() {
+            VerifyCSharpDiagnostic(Correct2);
+        }
+
+        [TestMethod]
+        public void UseOfGetCurrentTimeOfDifferentMethodsIsCorrect() {
+            VerifyCSharpDiagnostic(Correct3);
         }
         
         private static DiagnosticResult CreateDiagnosticResult(int line, int column, string method) {

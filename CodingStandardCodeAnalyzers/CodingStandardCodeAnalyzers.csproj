@@ -40,6 +40,7 @@
     <Compile Include="DateTimeClassUsageCodeAnalyzer.cs" />
     <Compile Include="Extensions\ContextExtensions.cs" />
     <Compile Include="Extensions\NodeExtensions.cs" />
+    <Compile Include="Extensions\SearchMethodInfo.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
     <Compile Include="Extensions\SyntaxFactoryHelper.cs" />
     <Compile Include="FieldAccessCodeAnalyzerCodeFixProvider.cs" />

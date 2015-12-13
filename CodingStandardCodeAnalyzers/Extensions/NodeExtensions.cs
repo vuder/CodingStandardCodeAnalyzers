@@ -9,14 +9,38 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+using Microsoft.CodeAnalysis.Diagnostics;
+
 namespace CodingStandardCodeAnalyzers {
+    /// <summary>
+    /// Check if the node is one of specified a members.
+    /// </summary>
     [DebuggerDisplay("nonUserAttributeRegex={nonUserAttributeRegex}")]
-    public static class NodeExtensions
-    {
+    public static class NodeExtensions {
+
+        public static ISymbol CheckNodeIsMemberOfType(this SyntaxNode node, SyntaxNodeAnalysisContext context, IEnumerable<SearchMethodInfo> membersToSearch) {
+            if (node == null || context.SemanticModel == null) { return null; }
+            SymbolInfo diagnostics = context.SemanticModel.GetSymbolInfo(node);
+            ISymbol symbol = diagnostics.Symbol;
+            if (symbol?.ContainingType?.ContainingNamespace == null) { return null; }
+            foreach (SearchMethodInfo methodInfo in membersToSearch) {
+                if (symbol.ContainingType.ContainingNamespace.Name != methodInfo.Namespace) {
+                    continue;
+                }
+                string className = symbol.ContainingType.Name;
+                string memberName = symbol.Name;
+                if (className == methodInfo.ClassName && memberName == methodInfo.MemberName) {
+                    return symbol;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Used to look up non user code attributes in HasIgnorableAttributes.
         /// </summary>
@@ -39,18 +63,13 @@ namespace CodingStandardCodeAnalyzers {
         /// Full credit to the awesome Giggio for the inspiration 
         /// https://github.com/code-cracker/code-cracker/blob/master/src/Common/CodeCracker.Common/Extensions/AnalyzerExtensions.cs
         /// </remarks>
-        public static SyntaxNode FirstAncestorOfType(this SyntaxNode node, params Type[] types)
-        {
+        public static SyntaxNode FirstAncestorOfType(this SyntaxNode node, params Type[] types) {
             SyntaxNode currentNode = node;
-            while (currentNode != null)
-            {
+            while (currentNode != null) {
                 SyntaxNode parent = currentNode.Parent;
-                if (parent != null)
-                {
-                    for (Int32 i = 0; i < types.Length; i++)
-                    {
-                        if (parent.GetType() == types[i])
-                        {
+                if (parent != null) {
+                    for (Int32 i = 0; i < types.Length; i++) {
+                        if (parent.GetType() == types[i]) {
                             return parent;
                         }
                     }
@@ -78,15 +97,11 @@ namespace CodingStandardCodeAnalyzers {
         /// Full credit to the awesome Giggio for the inspiration
         /// https://github.com/code-cracker/code-cracker/blob/master/src/Common/CodeCracker.Common/Extensions/AnalyzerExtensions.cs
         /// </remarks>
-        public static SyntaxNode FirstAncestorOrSelfOfType(this SyntaxNode node, params Type[] types)
-        {
+        public static SyntaxNode FirstAncestorOrSelfOfType(this SyntaxNode node, params Type[] types) {
             SyntaxNode currentNode = node;
-            while (currentNode != null)
-            {
-                for (Int32 i = 0; i < types.Length; i++)
-                {
-                    if (currentNode.GetType() == types[i])
-                    {
+            while (currentNode != null) {
+                for (Int32 i = 0; i < types.Length; i++) {
+                    if (currentNode.GetType() == types[i]) {
                         return currentNode;
                     }
                 }
@@ -126,11 +141,9 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// The CompilationUnitSyntax in <paramref name="unit"/>.
         /// </returns>
-        public static CompilationUnitSyntax AddUsingIfNotPresent(this CompilationUnitSyntax unit, String usingString)
-        {
+        public static CompilationUnitSyntax AddUsingIfNotPresent(this CompilationUnitSyntax unit, String usingString) {
             var t = unit.ChildNodes().OfType<UsingDirectiveSyntax>().Where(u => u.Name.ToString().Equals(usingString));
-            if (!t.Any())
-            {
+            if (!t.Any()) {
 
                 UsingDirectiveSyntax usingDirective = SyntaxFactoryHelper.QualifiedUsing(usingString);
 
@@ -150,10 +163,8 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// True if the property has a getter, false otherwise.
         /// </returns>
-        public static Boolean HasGetter(this PropertyDeclarationSyntax property)
-        {
-            if (property.AccessorList == null)
-            {
+        public static Boolean HasGetter(this PropertyDeclarationSyntax property) {
+            if (property.AccessorList == null) {
                 return false;
             }
             return property.AccessorList.Accessors.Where(t => t.IsKind(SyntaxKind.GetAccessorDeclaration)).Any();
@@ -164,8 +175,7 @@ namespace CodingStandardCodeAnalyzers {
         /// </summary>
         /// <param name="field"></param>
         /// <returns></returns>
-        public static String FieldName(this FieldDeclarationSyntax field)
-        {
+        public static String FieldName(this FieldDeclarationSyntax field) {
             var vars = field.DescendantNodes().Where(i => i.IsKind(SyntaxKind.VariableDeclarator));
             VariableDeclaratorSyntax varName = (VariableDeclaratorSyntax)vars.First();
 
@@ -181,15 +191,12 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// True if this node or its defining types are non user code.
         /// </returns>
-        public static Boolean IsGeneratedOrNonUserCode(this SyntaxNode node)
-        {
+        public static Boolean IsGeneratedOrNonUserCode(this SyntaxNode node) {
             // Look at the type, which could be nested.
             TypeDeclarationSyntax currType = (TypeDeclarationSyntax)(node.FirstAncestorOrSelfOfType(typeof(ClassDeclarationSyntax),
                                                                                                     typeof(StructDeclarationSyntax)));
-            while (currType != null)
-            {
-                if (currType.AttributeLists.HasIgnorableAttributes())
-                {
+            while (currType != null) {
+                if (currType.AttributeLists.HasIgnorableAttributes()) {
                     return true;
                 }
                 currType = (TypeDeclarationSyntax)(currType.FirstAncestorOfType(typeof(ClassDeclarationSyntax),
@@ -209,17 +216,13 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// True if the list contains a non user code attribute.
         /// </returns>
-        public static Boolean HasIgnorableAttributes(this SyntaxList<AttributeListSyntax> attributeList)
-        {
+        public static Boolean HasIgnorableAttributes(this SyntaxList<AttributeListSyntax> attributeList) {
 
-            for (Int32 i = 0; i < attributeList.Count; i++)
-            {
+            for (Int32 i = 0; i < attributeList.Count; i++) {
                 AttributeListSyntax currAttrList = attributeList[i];
-                for (Int32 k = 0; k < currAttrList.Attributes.Count; k++)
-                {
+                for (Int32 k = 0; k < currAttrList.Attributes.Count; k++) {
                     AttributeSyntax attr = currAttrList.Attributes[k];
-                    if (nonUserAttributeRegex.IsMatch(attr.Name.ToString()))
-                    {
+                    if (nonUserAttributeRegex.IsMatch(attr.Name.ToString())) {
                         return true;
                     }
                 }

@@ -41,12 +41,12 @@ namespace CodingStandardCodeAnalyzers {
 
             //Get all nodes where a methid that return current time is invoked
             var getTimeNodes = descendantNodes
-                .Where(statement => /*statement.Kind() == SyntaxKind.SimpleMemberAccessExpression ||*/ statement.Kind() == SyntaxKind.IdentifierName)
+                .Where(statement => statement.Kind() == SyntaxKind.IdentifierName)
                 //   .Cast<MemberAccessExpressionSyntax>()
                 .Where(statement => IsTimeGetterStatement(statement, context)).ToArray();
 
             //if a method has less than 2 get current time expression - the time measurement not applicable
-            //if a method has more than 2 get current time expression - the analizer need to handle this, but this is a bit more complicated. Room for improvement....
+            //if a method has more than 2 get current time expression - the analyzer need to handle this, but this is a bit more complicated. Room for improvement....
             if (getTimeNodes.Length != 2) { return; }
 
             var firstGetTimeNode = getTimeNodes[0];
@@ -55,7 +55,7 @@ namespace CodingStandardCodeAnalyzers {
             //both expressions have to call one method to get current time e.g. both should call DateTimeOffset.UtcNow()
             if (firstGetTimeNode.ToString() != secondGetTimeNode.ToString()) { return; }
 
-            //fisrt expresssion must be assignment of variable
+            //first expression must be assignment of variable
             var equalsClauseNode = firstGetTimeNode.Parent.Kind() == SyntaxKind.SimpleMemberAccessExpression ? firstGetTimeNode.Parent.Parent : firstGetTimeNode.Parent;
             var variableDeclarator = (equalsClauseNode as EqualsValueClauseSyntax)?.Parent as VariableDeclaratorSyntax;
             if (variableDeclarator == null) { return; }
@@ -63,7 +63,7 @@ namespace CodingStandardCodeAnalyzers {
 
             //second expression have to be subtract expression and use:
             //  1)firstGetTimeNode as left expression 
-            //  2) variableDeclarator from the first exression as right expression.
+            //  2) variableDeclarator from the first expression as right expression.
             var binaryExpressionNode = secondGetTimeNode.Parent.Kind() == SyntaxKind.SimpleMemberAccessExpression ? secondGetTimeNode.Parent.Parent : secondGetTimeNode.Parent;
             var expressionSyntax = binaryExpressionNode as BinaryExpressionSyntax;
             if (expressionSyntax == null || expressionSyntax.Kind() != SyntaxKind.SubtractExpression) { return; }
@@ -77,20 +77,13 @@ namespace CodingStandardCodeAnalyzers {
         }
 
         private bool IsTimeGetterStatement(SyntaxNode node, SyntaxNodeAnalysisContext context) {
-            SymbolInfo diagnostics = context.SemanticModel.GetSymbolInfo(node);
-            ISymbol symbol = diagnostics.Symbol;
-            if (symbol?.ContainingType?.ContainingNamespace == null) { return false; }
-            if (symbol.ContainingType.ContainingNamespace.Name != "System") {
-                return false;
-            }
-            string className = symbol.ContainingType.Name;
-            string methodName = symbol.Name;
-            if (className == "DateTime" || className == "DateTimeOffset") {
-                if (methodName == "Now" || methodName == "UtcNow") {
-                    return true;
-                }
-            }
-            return false;
+            var methodsToSearch = new[] {
+                new SearchMethodInfo("System", "DateTime", "Now"),
+                new SearchMethodInfo("System", "DateTime", "UtcNow"),
+                new SearchMethodInfo("System", "DateTimeOffset", "Now"),
+                new SearchMethodInfo("System", "DateTimeOffset", "UtcNow")
+            };
+            return node.CheckNodeIsMemberOfType(context, methodsToSearch) != null;
         }
 
         private bool AreSameSemantically(SyntaxNode node1, SyntaxNode node2, SyntaxNodeAnalysisContext context) {

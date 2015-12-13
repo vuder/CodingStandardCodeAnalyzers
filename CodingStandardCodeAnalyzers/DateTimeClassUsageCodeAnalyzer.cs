@@ -33,17 +33,16 @@ namespace CodingStandardCodeAnalyzers {
 
         private void AnalyzeDateTimeUsage(SyntaxNodeAnalysisContext context) {
             if (context.IsGeneratedOrNonUserCode()) { return; }
-            var expression = context.Node as IdentifierNameSyntax;
-            if (expression == null || context.SemanticModel == null) { return; }
-            SymbolInfo diagnostics = context.SemanticModel.GetSymbolInfo(expression);
-            ISymbol symbol = diagnostics.Symbol;
-            if (symbol?.ContainingType?.ContainingNamespace == null) { return; }
-            if (symbol.ContainingType.ContainingNamespace.Name == "System" && symbol.ContainingType.Name == "DateTime") {
-                if (symbol.Name == "Now" || symbol.Name == "Today") {
-                    Diagnostic diagnostic = Diagnostic.Create(Rule, expression.GetLocation(), $"{symbol.ContainingType.Name}.{symbol.Name}");
-                    context.ReportDiagnostic(diagnostic);
-                }
-            }
+            var node = context.Node as IdentifierNameSyntax;
+
+            var methodsToSearch = new[] {
+                new SearchMethodInfo("System", "DateTime", "Now"),
+                new SearchMethodInfo("System", "DateTime", "Today")
+            };
+            var symbol = node.CheckNodeIsMemberOfType(context, methodsToSearch);
+            if (symbol == null) { return; }
+            Diagnostic diagnostic = Diagnostic.Create(Rule, node.GetLocation(), $"{symbol.ContainingType.Name}.{symbol.Name}");
+            context.ReportDiagnostic(diagnostic);
         }
     }
 }

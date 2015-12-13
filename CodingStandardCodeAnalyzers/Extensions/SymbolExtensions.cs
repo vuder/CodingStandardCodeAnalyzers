@@ -14,8 +14,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace CodingStandardCodeAnalyzers {
-    public static class SymbolExtensions
-    {
+    public static class SymbolExtensions {
 
         /// <summary>
         /// Determines if the symbol is part of generated or non-user code.
@@ -30,24 +29,19 @@ namespace CodingStandardCodeAnalyzers {
         /// Returns true if the item, type, or assembly has the GeneratedCode attribute 
         /// applied.
         /// </returns>
-        public static Boolean IsGeneratedOrNonUserCode(this ISymbol symbol, Boolean checkAssembly = true)
-        {
+        public static Boolean IsGeneratedOrNonUserCode(this ISymbol symbol, Boolean checkAssembly = true) {
             // The goal here is to see if this ISymbol is part of auto generated code.
             // To do that, I'll walk up the hierarchy of item, type, to module/assembly
             // looking to see if the GeneratedCodeAttribute is set on any of them.
             var attributes = symbol.GetAttributes();
-            if (!HasIgnorableAttributes(attributes))
-            {
-                if (symbol.Kind != SymbolKind.NamedType && HasIgnorableAttributes(symbol.ContainingType.GetAttributes()))
-                {
+            if (!HasIgnorableAttributes(attributes)) {
+                if (symbol.Kind != SymbolKind.NamedType && HasIgnorableAttributes(symbol.ContainingType.GetAttributes())) {
                     return true;
                 }
 
-                if (checkAssembly)
-                {
+                if (checkAssembly) {
                     attributes = symbol.ContainingAssembly.GetAttributes();
-                    if (HasIgnorableAttributes(attributes))
-                    {
+                    if (HasIgnorableAttributes(attributes)) {
                         return true;
                     }
                 }
@@ -70,12 +64,9 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// Not null is the exact method match, null if there is no match.
         /// </returns>
-        static public IMethodSymbol WithParameters(this IEnumerable<IMethodSymbol> methods, Type[] parameters)
-        {
-            foreach (var currMethod in methods)
-            {
-                if (currMethod.DoParamatersMatch(parameters))
-                {
+        static public IMethodSymbol WithParameters(this IEnumerable<IMethodSymbol> methods, Type[] parameters) {
+            foreach (var currMethod in methods) {
+                if (currMethod.DoParamatersMatch(parameters)) {
                     return currMethod;
                 }
             }
@@ -94,20 +85,16 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// True, the Roslyn method is an override of <paramref name="methodInfo"/>.
         /// </returns>
-        static public Boolean IsOverideOf(this IMethodSymbol method, MethodInfo methodInfo)
-        {
+        static public Boolean IsOverideOf(this IMethodSymbol method, MethodInfo methodInfo) {
             String methAssemblyName = methodInfo.DeclaringType.AssemblyQualifiedName;
-            if (!method.GetTypesQualifiedAssemblyName().Equals(methAssemblyName))
-            {
-                if (!method.IsOverride)
-                {
+            if (!method.GetTypesQualifiedAssemblyName().Equals(methAssemblyName)) {
+                if (!method.IsOverride) {
                     return false;
                 }
                 return method.OverriddenMethod.IsOverideOf(methodInfo);
             }
 
-            if (!method.Name.Equals(methodInfo.Name))
-            {
+            if (!method.Name.Equals(methodInfo.Name)) {
                 return false;
             }
 
@@ -133,8 +120,7 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// The matching IMethodSymbol or null if that exact method is not found.
         /// </returns>
-        static public IMethodSymbol GetSpecificMethod(this INamedTypeSymbol namedTypeSymbol, String methodName, Type[] parameters)
-        {
+        static public IMethodSymbol GetSpecificMethod(this INamedTypeSymbol namedTypeSymbol, String methodName, Type[] parameters) {
             IMethodSymbol method = namedTypeSymbol.GetMembers(methodName).OfType<IMethodSymbol>().WithParameters(parameters);
             return method;
         }
@@ -154,17 +140,14 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// The matching IMethodSymbol or null if that exact method is not found.
         /// </returns>
-        static public IMethodSymbol FirstMethodOfSelfOrBaseType(this INamedTypeSymbol namedTypeSymbol, String methodName, Type[] parameters)
-        {
+        static public IMethodSymbol FirstMethodOfSelfOrBaseType(this INamedTypeSymbol namedTypeSymbol, String methodName, Type[] parameters) {
             IMethodSymbol method = namedTypeSymbol.GetSpecificMethod(methodName, parameters);
-            if (method != null)
-            {
+            if (method != null) {
                 return method;
             }
 
             namedTypeSymbol = namedTypeSymbol.BaseType;
-            if (namedTypeSymbol == null)
-            {
+            if (namedTypeSymbol == null) {
                 return null;
             }
             return namedTypeSymbol.FirstMethodOfSelfOrBaseType(methodName, parameters);
@@ -182,18 +165,14 @@ namespace CodingStandardCodeAnalyzers {
         /// <returns>
         /// True if the parameters match the types, false otherwise.
         /// </returns>
-        public static Boolean DoParamatersMatch(this IMethodSymbol method, Type[] parameters)
-        {
+        public static Boolean DoParamatersMatch(this IMethodSymbol method, Type[] parameters) {
             Int32 methodParamCount = method.Parameters.Count();
-            if (methodParamCount != parameters.Length)
-            {
+            if (methodParamCount != parameters.Length) {
                 return false;
             }
 
-            for (Int32 i = 0; i < methodParamCount; i++)
-            {
-                if (!method.Parameters[i].IsType(parameters[i]))
-                {
+            for (Int32 i = 0; i < methodParamCount; i++) {
+                if (!method.Parameters[i].IsType(parameters[i])) {
                     return false;
                 }
             }
@@ -215,12 +194,9 @@ namespace CodingStandardCodeAnalyzers {
         /// <remarks>
         /// This method does no checking if <paramref name="type"/> is actually an interface.
         /// </remarks>
-        public static Boolean IsDerivedFromInterface(this INamedTypeSymbol namedType, Type type)
-        {
-            foreach (var iFace in namedType.AllInterfaces)
-            {
-                if (iFace.IsType(type))
-                {
+        public static Boolean IsDerivedFromInterface(this INamedTypeSymbol namedType, Type type) {
+            foreach (var iFace in namedType.AllInterfaces) {
+                if (iFace.IsType(type)) {
                     return true;
                 }
             }
@@ -291,29 +267,22 @@ namespace CodingStandardCodeAnalyzers {
                                                                                                                     method.ContainingType.Name,
                                                                                                                     method.ContainingType.ContainingAssembly);
 
-        private static String BuildQualifiedAssemblyName(String nameSpace, String typeName, IAssemblySymbol assemblySymbol)
-        {
+        private static String BuildQualifiedAssemblyName(String nameSpace, String typeName, IAssemblySymbol assemblySymbol) {
             String symbolType;
-            if (String.IsNullOrEmpty(nameSpace))
-            {
+            if (String.IsNullOrEmpty(nameSpace)) {
                 symbolType = typeName;
-            }
-            else
-            {
+            } else {
                 symbolType = String.Format("{0}.{1}", nameSpace, typeName);
             }
             String symbolAssemblyQualiedName = symbolType + ", " + new AssemblyName(assemblySymbol.Identity.GetDisplayName(true));
             return symbolAssemblyQualiedName;
         }
 
-        private static Boolean HasIgnorableAttributes(ImmutableArray<AttributeData> attributes)
-        {
-            for (Int32 i = 0; i < attributes.Count(); i++)
-            {
+        private static Boolean HasIgnorableAttributes(ImmutableArray<AttributeData> attributes) {
+            for (Int32 i = 0; i < attributes.Count(); i++) {
                 AttributeData attr = attributes[i];
                 if ((attr.AttributeClass.IsType(typeof(GeneratedCodeAttribute)) ||
-                    (attr.AttributeClass.IsType(typeof(DebuggerNonUserCodeAttribute)))))
-                {
+                    (attr.AttributeClass.IsType(typeof(DebuggerNonUserCodeAttribute))))) {
                     return true;
                 }
             }

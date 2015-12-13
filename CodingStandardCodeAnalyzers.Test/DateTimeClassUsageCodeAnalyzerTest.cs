@@ -63,7 +63,7 @@ using System;
 namespace DateTimeClassAnalyzerTest {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine(UtcNow);  
+            Console.WriteLine(DateTime.UtcNow);  
         }
     }
 }";
