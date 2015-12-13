@@ -49,6 +49,7 @@
     <Compile Include="FieldAccessCodeAnalyzerTest.cs" />
     <Compile Include="IfStatementAnalyzerSamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeMeasurementSamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\CodingStandardCodeAnalyzers.Vsix\bin\Debug\CodingStandardCodeAnalyzers.dll" />
