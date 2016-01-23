@@ -19,3 +19,9 @@ The project currently contains following C# Roslyn code analyzers:
   Checks that all fields of a class are private, the only exception is static readonly fields. Corresponding code fix changes access modifier to private.
 
 Nuget feed with the analyzers: https://www.myget.org/F/codingstandardcodeanalyzers/api/v3/index.json
+
+Cheked with Coverity
+<a href="https://scan.coverity.com/projects/vuder-codingstandardcodeanalyzers">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/7711/badge.svg"/>
+</a>
